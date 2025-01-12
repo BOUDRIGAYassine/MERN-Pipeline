@@ -1,0 +1,35 @@
+version: "3.8"
+services:
+  api:
+    build: ./app/
+    container_name: api
+    ports:
+      - "4000:4000"
+    command: npm start
+    environment:
+      MONGO_URI: mongodb://root:root@db:27017
+    volumes:
+      - "./app/:/app"
+      - "/app/node_modules"
+  reactproj:
+    build: ./react-proj/
+    container_name: reactproj
+    ports:
+      - "5173:5173"
+    command: npm run dev
+    environment:
+      REACT_APP_API_URL: http://api:4000
+    volumes:
+      - "./react-proj/:/app"
+      - "/app/node_modules"  
+  db:
+    image: mongo:4.4
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    volumes:
+      - db-data:/data/db
+
+volumes:
+  db-data: {}
