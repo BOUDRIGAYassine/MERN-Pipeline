@@ -1,23 +1,20 @@
-# Utiliser une version de Node.js
+#node js version
 FROM node:latest
 
-# Définir le répertoire de travail dans le conteneur
+# working directory
 WORKDIR /app
 
-# Copier les fichiers package.json et package-lock.json pour installer les dépendances
+# handeling dependecy source (package.json)
 COPY package.json ./
 
-# Installer les dépendances
+# install dependencies 
 RUN npm install
 
-# Copier le reste des fichiers de l'application dans le conteneur
+# copy the rest of the code
 COPY . ./
 
-# Définir une variable d'environnement pour le port
+#env
 ENV PORT 4000
-
-# Exposer le port sur lequel l'application écoutera
+# port
 EXPOSE ${PORT}
 
-# Commande par défaut pour démarrer l'application
-CMD ["npm", "start"]

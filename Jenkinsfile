@@ -16,17 +16,16 @@ pipeline {
                     credentialsId: 'Gitlab_ssh'
             }
         }
-    stage('Build Server Image') {
-        steps {
-            dir('server') {
-                script {
-                    // Debug : Lister les fichiers pour vérifier la présence de Dockerfile
-                    sh 'ls -la'
-                    dockerImageServer = docker.build("${IMAGE_NAME_SERVER}")
+        stage('Build Server Image') {
+            steps {
+                dir('server') {
+                    script {
+                        dockerImageServer = docker . build ("${IMAGE_NAME_SERVER}")
+                    }
                 }
             }
-        }
-    }
+        }   
+
 
         stage('Build Client Image') {
             steps {
