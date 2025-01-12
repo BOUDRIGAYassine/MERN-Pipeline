@@ -12,7 +12,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 git branch: 'main',
-                    url: 'git@gitlab.com/project.git',
+                    url: 'https://github.com/BOUDRIGAYassine/MERN-Pipeline.git',
                     credentialsId: 'Gitlab_ssh'
             }
         }
