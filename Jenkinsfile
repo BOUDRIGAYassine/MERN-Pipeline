@@ -1,8 +1,5 @@
 pipeline {
     agent any
-    triggers {
-        pollSCM ( ’H/5 * * * *’)
-    }
     environment {
         DOCKERHUB_CREDENTIALS = credentials ( ’ dockerhub ’)
         IMAGE_NAME_SERVER = ’[ username ]/ mern - server ’
