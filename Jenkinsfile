@@ -5,8 +5,9 @@ pipeline {
     }
     environment {
         DOCKERHUB_CREDENTIALS = credentials('yassineboudriga')
-        IMAGE_NAME_SERVER = 'yassineboudriga/mern-server' // Remplacez par votre vrai nom d'utilisateur
-        IMAGE_NAME_CLIENT = 'yassineboudriga/mern-client' // Remplacez par votre vrai nom d'utilisateur
+        IMAGE_NAME_SERVER = 'yassineboudriga/mern-server'
+        IMAGE_NAME_CLIENT = 'yassineboudriga/mern-client'
+        IMAGE_TAG = env.BUILD_NUMBER ?: 'latest'
     }
     stages {
         stage('Checkout') {
@@ -20,18 +21,18 @@ pipeline {
             steps {
                 dir('server') {
                     script {
-                        dockerImageServer = docker.build ("${IMAGE_NAME_SERVER}")
+                        sh 'ls -al' // Debug file existence
+                        dockerImageServer = docker.build("${IMAGE_NAME_SERVER}:${IMAGE_TAG}")
                     }
                 }
             }
-        }   
-
-
+        }
         stage('Build Client Image') {
             steps {
                 dir('client') {
                     script {
-                        dockerImageClient = docker.build("${IMAGE_NAME_CLIENT}")
+                        sh 'ls -al' // Debug file existence
+                        dockerImageClient = docker.build("${IMAGE_NAME_CLIENT}:${IMAGE_TAG}")
                     }
                 }
             }
@@ -43,7 +44,7 @@ pipeline {
                     docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
                         aquasec/trivy:latest image --exit-code 0 \
                         --severity LOW,MEDIUM,HIGH,CRITICAL \
-                        ${IMAGE_NAME_SERVER}
+                        ${IMAGE_NAME_SERVER}:${IMAGE_TAG}
                     """
                 }
             }
@@ -55,7 +56,7 @@ pipeline {
                     docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
                         aquasec/trivy:latest image --exit-code 0 \
                         --severity LOW,MEDIUM,HIGH,CRITICAL \
-                        ${IMAGE_NAME_CLIENT}
+                        ${IMAGE_NAME_CLIENT}:${IMAGE_TAG}
                     """
                 }
             }
@@ -64,8 +65,8 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('', "${DOCKERHUB_CREDENTIALS}") {
-                        dockerImageServer.push()
-                        dockerImageClient.push()
+                        dockerImageServer.push("${IMAGE_TAG}")
+                        dockerImageClient.push("${IMAGE_TAG}")
                     }
                 }
             }
