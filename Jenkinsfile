@@ -31,7 +31,7 @@ pipeline {
             steps {
                 dir('react-proj') {
                     script {
-                        dockerImageClient = docker.build("${IMAGE_NAME_CLIENT}")
+                        dockerImageClient = docker.build("${IMAGE_NAME_CLIENT}", "-f C:\Users\BOUDRIGA-Yassine\Desktop\projet devops\react-proj\Dockerfile")
                     }
                 }
             }
