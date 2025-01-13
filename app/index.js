@@ -28,7 +28,7 @@ app.get('/', (req, res) => {
 // Charger les routes pour les fournisseurs, les clients et les articles
 require('./src/api/routes/routes')(app, database);
 
-const PORT = process.env.PORT || 3000; // Définir le port par défaut si non spécifié dans .env
+const PORT = process.env.PORT || 3001; // Définir le port par défaut si non spécifié dans .env
 app.listen(PORT, () => {
     console.log('Listening on port', PORT);
 });
