@@ -16,6 +16,13 @@ pipeline {
                     credentialsId: 'Gitlab_ssh'
             }
         }
+        stage('Debug Client Dockerfile Presence') {
+            steps {
+                dir('react-proj') {
+                    sh 'ls -la'
+                }
+            }
+        }
         stage('Build Server Image') {
             steps {
                 dir('app') {
@@ -31,7 +38,7 @@ pipeline {
             steps {
                 dir('react-proj') {
                     script {
-                        dockerImageClient = docker.build("${IMAGE_NAME_CLIENT}")
+                        dockerImageClient = docker.build("${IMAGE_NAME_CLIENT}", "-f C:\Users\BOUDRIGA-Yassine\Desktop\projet devops\react-proj\Dockerfile .")
                     }
                 }
             }
